@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Expense App',
-      home: MyHomePage(),
+      home: const MyHomePage(),
+      theme: ThemeData(primarySwatch: Colors.purple, fontFamily: 'Quicksand'),
     );
   }
 }
@@ -67,10 +68,9 @@ class MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Xpense App"),
-        backgroundColor: Color.fromARGB(255, 126, 86, 226),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => openModalTransaction(context),
           )
         ],
@@ -83,18 +83,12 @@ class MyHomePageState extends State<MyHomePage> {
               child: Text("CHART!"),
             ),
           ),
-          Column(
-            children: [
-              NewTransaction(addNewTransaction),
-              TransactionList(_userTransactions),
-            ],
-          ),
+          TransactionList(_userTransactions),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => openModalTransaction(context),
-        child: Icon(Icons.add),
-        backgroundColor: Color.fromARGB(255, 126, 86, 226),
+        child: const Icon(Icons.add),
         elevation: 12,
         hoverElevation: 30,
       ),

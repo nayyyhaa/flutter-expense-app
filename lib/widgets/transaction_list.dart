@@ -25,16 +25,16 @@ class TransactionList extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: const Color.fromARGB(255, 115, 41, 167),
+                      color: Theme.of(context).primaryColorDark,
                       width: 2,
                     ),
                   ),
                   child: Text(
                     '\$${transactions[index].amount.toStringAsFixed(2)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: Color.fromARGB(255, 115, 41, 167),
+                      color: Theme.of(context).primaryColorDark,
                     ),
                   ),
                 ),
@@ -51,9 +51,9 @@ class TransactionList extends StatelessWidget {
                     ),
                     Text(
                       DateFormat('EEE, M/d/y').format(transactions[index].date),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: Color.fromARGB(255, 101, 101, 101),
+                        color: Theme.of(context).primaryColorDark,
                       ),
                     ),
                   ],
