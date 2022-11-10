@@ -33,19 +33,24 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(groupedTransactionsValue);
     return Card(
       elevation: 10,
       margin: EdgeInsets.all(10),
-      child: Row(
-        children: groupedTransactionsValue.map((txn) {
-          return ChartBar(
-              sprendingAmt: txn['amount'],
-              label: txn['day'],
-              spendingPtg: spendingTotal == 0.0
-                  ? 0.0
-                  : (txn['amount'] as double) / spendingTotal);
-        }).toList(),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: groupedTransactionsValue.map((txn) {
+            return Flexible(
+                fit: FlexFit.tight,
+                child: ChartBar(
+                    sprendingAmt: txn['amount'],
+                    label: txn['day'],
+                    spendingPtg: spendingTotal == 0.0
+                        ? 0.0
+                        : (txn['amount'] as double) / spendingTotal));
+          }).toList(),
+        ),
       ),
     );
   }

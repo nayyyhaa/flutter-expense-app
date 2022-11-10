@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class ChartBar extends StatelessWidget {
   final sprendingAmt;
@@ -17,7 +15,9 @@ class ChartBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text('\$${sprendingAmt.toStringAsFixed(0)}'),
+        FittedBox(
+          child: Text('\$${sprendingAmt.toStringAsFixed(0)}'),
+        ),
         SizedBox(
           height: 10,
         ),
