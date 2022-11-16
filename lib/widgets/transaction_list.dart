@@ -66,11 +66,21 @@ class TransactionList extends StatelessWidget {
                     subtitle: Text(
                       DateFormat('EEE, M/d/y').format(transactions[index].date),
                     ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Color.fromARGB(255, 233, 93, 93),
-                      onPressed: () =>
-                          deleteTransaction(transactions[index].id),
+                    trailing: Wrap(
+                      spacing: 12, // space between two icons
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () => {},
+                        ), // icon-1
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Color.fromARGB(255, 233, 93, 93),
+                          onPressed: () =>
+                              deleteTransaction(transactions[index].id),
+                        ), // icon-2
+                      ],
                     ),
                   ),
                 );

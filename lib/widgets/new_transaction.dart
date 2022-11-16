@@ -16,12 +16,22 @@ class NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   var selectedDate;
+  String errorMsg = '';
 
   void submitNewTransaction() {
     final userTitle = titleController.text;
-    final userAmount = double.parse(amountController.text);
-
-    if (userTitle.isEmpty || userAmount <= 0 || selectedDate == null) return;
+    var userAmount;
+    try {
+      userAmount = double.parse(amountController.text);
+    } catch (e) {
+      userAmount = 0;
+    }
+    if (userTitle.isEmpty || userAmount <= 0 || selectedDate == null) {
+      setState(() {
+        errorMsg = "Enter valid data!!";
+      });
+      return;
+    }
     widget.addNewTransaction(userTitle, userAmount, selectedDate);
     Navigator.of(context).pop();
   }
@@ -82,6 +92,13 @@ class NewTransactionState extends State<NewTransaction> {
                   ),
                 )
               ]),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                errorMsg,
+                style: TextStyle(color: Color.fromARGB(255, 233, 77, 66)),
+              ),
             ),
             ElevatedButton(
               onPressed: submitNewTransaction,
