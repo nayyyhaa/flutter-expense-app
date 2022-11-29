@@ -40,6 +40,36 @@ class MyHomePageState extends State<MyHomePage> {
       amount: 75,
       date: DateTime.now(),
     ),
+    Transaction(
+      id: 't3',
+      title: 'Purse',
+      amount: 95,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't4',
+      title: 'Blanket',
+      amount: 105,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't5',
+      title: 'Band',
+      amount: 15,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't6',
+      title: 'Bottle',
+      amount: 95,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't7',
+      title: 'Dry Fruits',
+      amount: 115,
+      date: DateTime.now(),
+    ),
   ];
 
   void addNewTransaction(String titleTx, double amountTx, selectedDate) {
@@ -77,20 +107,33 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: const Text("Xpense App"),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => openModalTransaction(context),
+        )
+      ],
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Xpense App"),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => openModalTransaction(context),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: Column(
         children: <Widget>[
-          Chart(_recentTransactions),
-          TransactionList(_userTransactions, deleteTransaction),
+          Container(
+            height: (MediaQuery.of(context).size.height -
+                    appBar.preferredSize.height -
+                    MediaQuery.of(context).padding.top) *
+                0.3,
+            child: Chart(_recentTransactions),
+          ),
+          Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.7,
+              child: TransactionList(_userTransactions, deleteTransaction)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
