@@ -114,6 +114,8 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _isLandscapeMode =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: const Text("Xpense App"),
       actions: <Widget>[
@@ -123,12 +125,19 @@ class MyHomePageState extends State<MyHomePage> {
         )
       ],
     );
+    final txList = Container(
+        height: (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.65,
+        child: TransactionList(_userTransactions, deleteTransaction));
 
     return Scaffold(
       appBar: appBar,
       body: Column(
         children: <Widget>[
-          Container(
+          if (_isLandscapeMode)
+            Container(
               height: (MediaQuery.of(context).size.height -
                       appBar.preferredSize.height -
                       MediaQuery.of(context).padding.top) *
@@ -147,21 +156,27 @@ class MyHomePageState extends State<MyHomePage> {
                         });
                       })
                 ],
-              )),
-          _isChartVisible
-              ? Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.7,
-                  child: Chart(_recentTransactions),
-                )
-              : Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.65,
-                  child: TransactionList(_userTransactions, deleteTransaction)),
+              ),
+            ),
+          if (!_isLandscapeMode)
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.3,
+              child: Chart(_recentTransactions),
+            ),
+          if (!_isLandscapeMode) txList,
+          if (_isLandscapeMode)
+            _isChartVisible
+                ? Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appBar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) *
+                        0.7,
+                    child: Chart(_recentTransactions),
+                  )
+                : txList,
         ],
       ),
       floatingActionButton: FloatingActionButton(
