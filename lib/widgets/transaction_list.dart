@@ -18,8 +18,10 @@ class TransactionList extends StatelessWidget {
                 Text(
                   "No transactions made yet!",
                   style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold),
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
                 ),
                 const SizedBox(
                   height: 20,

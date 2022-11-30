@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 import 'package:flutter_expense_app/widgets/chart.dart';
+
 import './models/Transaction.dart';
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
@@ -114,77 +118,106 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _isLandscapeMode =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final appBar = AppBar(
-      title: const Text("Xpense App"),
-      actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () => openModalTransaction(context),
-        )
-      ],
-    );
+    final mediaQuery = MediaQuery.of(context);
+    final _isLandscapeMode = mediaQuery.orientation == Orientation.landscape;
+    final dynamic appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: const Text('Personal Expenses'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => openModalTransaction(context),
+                )
+              ],
+            ))
+        : AppBar(
+            title: const Text("Xpense App"),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () => openModalTransaction(context),
+              )
+            ],
+          );
     final txList = Container(
-        height: (MediaQuery.of(context).size.height -
+        height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
-                MediaQuery.of(context).padding.top) *
+                mediaQuery.padding.top) *
             0.65,
         child: TransactionList(_userTransactions, deleteTransaction));
+    final appBody = SafeArea(
+        child: Column(
+      children: <Widget>[
+        if (_isLandscapeMode)
+          Container(
+            height: (mediaQuery.size.height -
+                    appBar.preferredSize.height -
+                    mediaQuery.padding.top) *
+                0.05,
+            margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Show Chart',
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                Switch.adaptive(
+                    activeColor: Theme.of(context).primaryColorLight,
+                    value: _isChartVisible,
+                    onChanged: (val) {
+                      setState(() {
+                        _isChartVisible = val;
+                      });
+                    })
+              ],
+            ),
+          ),
+        if (!_isLandscapeMode)
+          Container(
+            height: (mediaQuery.size.height -
+                    appBar.preferredSize.height -
+                    mediaQuery.padding.top) *
+                0.3,
+            child: Chart(_recentTransactions),
+          ),
+        if (!_isLandscapeMode) txList,
+        if (_isLandscapeMode)
+          _isChartVisible
+              ? Container(
+                  height: (mediaQuery.size.height -
+                          appBar.preferredSize.height -
+                          mediaQuery.padding.top) *
+                      0.7,
+                  child: Chart(_recentTransactions),
+                )
+              : txList,
+      ],
+    ));
 
-    return Scaffold(
-      appBar: appBar,
-      body: Column(
-        children: <Widget>[
-          if (_isLandscapeMode)
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.05,
-              margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Show Chart'),
-                  Switch(
-                      value: _isChartVisible,
-                      onChanged: (val) {
-                        setState(() {
-                          _isChartVisible = val;
-                        });
-                      })
-                ],
-              ),
-            ),
-          if (!_isLandscapeMode)
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.3,
-              child: Chart(_recentTransactions),
-            ),
-          if (!_isLandscapeMode) txList,
-          if (_isLandscapeMode)
-            _isChartVisible
-                ? Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.7,
-                    child: Chart(_recentTransactions),
-                  )
-                : txList,
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => openModalTransaction(context),
-        child: const Icon(Icons.add),
-        elevation: 12,
-        hoverElevation: 30,
-      ),
-    );
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            navigationBar: appBar as ObstructingPreferredSizeWidget,
+            child: appBody,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: appBody,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    onPressed: () => openModalTransaction(context),
+                    child: const Icon(Icons.add),
+                    elevation: 12,
+                    hoverElevation: 30,
+                  ),
+          );
   }
 }
