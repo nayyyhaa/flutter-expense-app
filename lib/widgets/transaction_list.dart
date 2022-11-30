@@ -69,11 +69,16 @@ class TransactionList extends StatelessWidget {
                   trailing: Wrap(
                     spacing: 12, // space between two icons
                     children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Theme.of(context).primaryColor,
-                        onPressed: () => {},
-                      ), // icon-1
+                      MediaQuery.of(context).size.width > 460
+                          ? TextButton.icon(
+                              icon: Icon(Icons.edit),
+                              label: Text('edit aint working'),
+                              onPressed: () => {})
+                          : IconButton(
+                              icon: Icon(Icons.edit),
+                              color: Theme.of(context).primaryColor,
+                              onPressed: () => {},
+                            ), // icon-1
                       IconButton(
                         icon: Icon(Icons.delete),
                         color: Color.fromARGB(255, 233, 93, 93),
