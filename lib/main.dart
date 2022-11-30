@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
 import 'package:flutter_expense_app/widgets/chart.dart';
 import './models/Transaction.dart';
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
 
 void main() {
+  //to keep app in portarit mode
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
