@@ -77,6 +77,8 @@ class MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
+  var _isChartVisible = false;
+
   void addNewTransaction(String titleTx, double amountTx, selectedDate) {
     final newTransaction = Transaction(
         id: DateTime.now().toString(),
@@ -127,18 +129,39 @@ class MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: <Widget>[
           Container(
-            height: (MediaQuery.of(context).size.height -
-                    appBar.preferredSize.height -
-                    MediaQuery.of(context).padding.top) *
-                0.3,
-            child: Chart(_recentTransactions),
-          ),
-          Container(
               height: (MediaQuery.of(context).size.height -
                       appBar.preferredSize.height -
                       MediaQuery.of(context).padding.top) *
-                  0.7,
-              child: TransactionList(_userTransactions, deleteTransaction)),
+                  0.05,
+              margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                      value: _isChartVisible,
+                      onChanged: (val) {
+                        setState(() {
+                          _isChartVisible = val;
+                        });
+                      })
+                ],
+              )),
+          _isChartVisible
+              ? Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.7,
+                  child: Chart(_recentTransactions),
+                )
+              : Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.65,
+                  child: TransactionList(_userTransactions, deleteTransaction)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
