@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../models/Transaction.dart';
+import 'transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
@@ -35,62 +35,9 @@ class TransactionList extends StatelessWidget {
           })
         : ListView.builder(
             itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 25,
-                    child: Flexible(
-                      fit: FlexFit.tight,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        child: FittedBox(
-                          fit: BoxFit.cover,
-                          child: Text(
-                            '\$${transactions[index].amount.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  title: Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(
-                      transactions[index].title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  subtitle: Text(
-                    DateFormat('EEE, M/d/y').format(transactions[index].date),
-                  ),
-                  trailing: Wrap(
-                    spacing: 12, // space between two icons
-                    children: <Widget>[
-                      MediaQuery.of(context).size.width > 460
-                          ? TextButton.icon(
-                              icon: Icon(Icons.edit),
-                              label: Text('edit aint working'),
-                              onPressed: () => {})
-                          : IconButton(
-                              icon: Icon(Icons.edit),
-                              color: Theme.of(context).primaryColor,
-                              onPressed: () => {},
-                            ), // icon-1
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        color: Color.fromARGB(255, 233, 93, 93),
-                        onPressed: () =>
-                            deleteTransaction(transactions[index].id),
-                      ), // icon-2
-                    ],
-                  ),
-                ),
-              );
+              return TransactionItem(
+                  transaction: transactions[index],
+                  deleteTransaction: deleteTransaction);
             },
             itemCount: transactions.length,
           );
