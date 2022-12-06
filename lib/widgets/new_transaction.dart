@@ -4,10 +4,13 @@ import 'package:intl/intl.dart';
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
 
-  NewTransaction(this.addNewTransaction);
+  NewTransaction(this.addNewTransaction) {
+    print('1 NewTransaction Contructor');
+  }
 
   @override
   State<StatefulWidget> createState() {
+    print('2. NewTransaction createState');
     return NewTransactionState();
   }
 }
@@ -17,6 +20,31 @@ class NewTransactionState extends State<NewTransaction> {
   final amountController = TextEditingController();
   var selectedDate;
   String errorMsg = '';
+
+  NewTransactionState() {
+    print('3. NewTransactionState Contructor');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('4. initState');
+  }
+
+  @override
+  void didUpdateWidget(NewTransaction oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('5. didUpdateWidget');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('6. dispose');
+  }
 
   void submitNewTransaction() {
     final userTitle = titleController.text;
