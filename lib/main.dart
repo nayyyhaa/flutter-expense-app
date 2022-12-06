@@ -116,6 +116,64 @@ class MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
+  List<Widget> _buildLandscapeMode(
+      MediaQueryData mediaQuery, PreferredSizeWidget appBar, Widget txList) {
+    return [
+      Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.05,
+        margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Show Chart',
+              style: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            Switch.adaptive(
+                activeColor: Theme.of(context).primaryColorLight,
+                value: _isChartVisible,
+                onChanged: (val) {
+                  setState(() {
+                    _isChartVisible = val;
+                  });
+                })
+          ],
+        ),
+      ),
+      _isChartVisible
+          ? Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.7,
+              child: Chart(_recentTransactions),
+            )
+          : txList
+    ];
+  }
+
+  List<Widget> _buildPortraitMode(
+      MediaQueryData mediaQuery, PreferredSizeWidget appBar, Widget txList) {
+    return [
+      Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransactions),
+      ),
+      txList
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -151,54 +209,9 @@ class MyHomePageState extends State<MyHomePage> {
         child: Column(
       children: <Widget>[
         if (_isLandscapeMode)
-          Container(
-            height: (mediaQuery.size.height -
-                    appBar.preferredSize.height -
-                    mediaQuery.padding.top) *
-                0.05,
-            margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Show Chart',
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                Switch.adaptive(
-                    activeColor: Theme.of(context).primaryColorLight,
-                    value: _isChartVisible,
-                    onChanged: (val) {
-                      setState(() {
-                        _isChartVisible = val;
-                      });
-                    })
-              ],
-            ),
-          ),
+          ..._buildLandscapeMode(mediaQuery, appBar, txList),
         if (!_isLandscapeMode)
-          Container(
-            height: (mediaQuery.size.height -
-                    appBar.preferredSize.height -
-                    mediaQuery.padding.top) *
-                0.3,
-            child: Chart(_recentTransactions),
-          ),
-        if (!_isLandscapeMode) txList,
-        if (_isLandscapeMode)
-          _isChartVisible
-              ? Container(
-                  height: (mediaQuery.size.height -
-                          appBar.preferredSize.height -
-                          mediaQuery.padding.top) *
-                      0.7,
-                  child: Chart(_recentTransactions),
-                )
-              : txList,
+          ..._buildPortraitMode(mediaQuery, appBar, txList),
       ],
     ));
 
